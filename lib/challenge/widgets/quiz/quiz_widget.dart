@@ -1,39 +1,57 @@
 import 'package:DevQuiz/challenge/widgets/awnser/awnser_widget.dart';
 import 'package:DevQuiz/core/app_text_styles.dart';
+import 'package:DevQuiz/shared/models/awnser_model.dart';
+import 'package:DevQuiz/shared/models/question_model.dart';
 import 'package:flutter/material.dart';
 
-class QuizWidget extends StatelessWidget {
+class QuizWidget extends StatefulWidget {
   
-  final String title;
+  final QuestionModel question;
+  final VoidCallback onChange;
 
-  const QuizWidget({Key? key, required this.title}) : super(key: key);
+  const QuizWidget({Key? key, required this.question, required this.onChange}) : super(key: key);
+
+  @override
+  _QuizWidgetState createState() => _QuizWidgetState();
+}
+
+class _QuizWidgetState extends State<QuizWidget> {
+
+  int indexSelected = -1;
+
+  AwnserModel awnsers(int index) => widget.question.awnswers[index];
 
   @override
   Widget build(BuildContext context) {
     return new Container(
       child: new Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          new Text(
-            title,
-            style: AppTextStyles.heading,
+          new SizedBox(height: 64),
+          new Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: new Text(
+              widget.question.title,
+              style: AppTextStyles.heading,
+            ),
           ),
           new SizedBox(height: 24),
-          new AwnserWidget(
-            isRight: false,
-            isSelected: true,
-            title: 'Kit de desenvolvimento de interface de usuário'
-          ),
-          new AwnserWidget(
-            isRight: true,
-            isSelected: true,
-            title: 'Possibilita a criação de aplicativos compilados nativamente'
-          ),
-          new AwnserWidget(
-            title: 'Acho que é uma marca de café do Himalaia'
-          ),
-          new AwnserWidget(
-            title: 'Possibilita a criação de desktops que são muito incríveis'
-          )
+          for (var i = 0; i < widget.question.awnswers.length; i++)
+            new AwnserWidget(
+              awnser: awnsers(i),
+              isSelected: indexSelected == i,
+              disabled: indexSelected != -1,
+              onTap: () {
+                indexSelected = i;
+                setState(() {});
+                Future.delayed(new Duration(seconds: 1))
+                  .then((value) => widget.onChange());
+              },
+            )
+          // ...widget.question.awnswers.map((e) => new AwnserWidget(
+          //   title: e.title,
+          //   isRight: e.isRight,
+          // )).toList()
         ],
       ),
     );
