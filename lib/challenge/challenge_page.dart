@@ -2,14 +2,16 @@ import 'package:DevQuiz/challenge/challenge_controller.dart';
 import 'package:DevQuiz/challenge/widgets/next_button/next_button_widget.dart';
 import 'package:DevQuiz/challenge/widgets/question_indicator/question_indicator_widget.dart';
 import 'package:DevQuiz/challenge/widgets/quiz/quiz_widget.dart';
+import 'package:DevQuiz/result/result_page.dart';
 import 'package:DevQuiz/shared/models/question_model.dart';
 import 'package:flutter/material.dart';
 
 class ChallengePage extends StatefulWidget {
 
   final List<QuestionModel> questions;
+  final String title;
 
-  const ChallengePage({Key? key, required this.questions}) : super(key: key);
+  const ChallengePage({Key? key, required this.questions, required this.title}) : super(key: key);
 
   @override
   _ChallengePageState createState() => _ChallengePageState();
@@ -35,6 +37,11 @@ class _ChallengePageState extends State<ChallengePage> {
         curve: Curves.linear
       );
     }
+  }
+
+  void onSelected(bool value) {
+    if (value) controller.qtdAnswer++;
+    nextPage();
   }
 
   @override
@@ -68,7 +75,7 @@ class _ChallengePageState extends State<ChallengePage> {
         physics: new NeverScrollableScrollPhysics(),
         children: widget.questions.map((e) => new QuizWidget(
           question: e,
-          onChange: nextPage,
+          onSelected: onSelected,
         )).toList(),
       ),
       bottomNavigationBar: new SafeArea(
@@ -96,7 +103,13 @@ class _ChallengePageState extends State<ChallengePage> {
                       new Expanded(
                         child: NextButtonWidget.confirm(
                           label: 'Confirmar',
-                          onTap: () => Navigator.of(context).pop()
+                          onTap: () => Navigator.of(context).pushReplacement(
+                            new MaterialPageRoute(builder: (builder) => new ResultPage(
+                              title: widget.title,
+                              length: widget.questions.length,
+                              result: controller.qtdAnswer,
+                            ))
+                          )
                         ),
                       )
                   ],

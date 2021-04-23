@@ -62,10 +62,13 @@ class _HomePageState extends State<HomePage> {
                   crossAxisCount: 2,
                   children: controller.quizzes!.map((e) => new QuizCardWidget(
                     title: e.title,
-                    completed: '${e.questionAwnsered} de ${e.questions.length}',
-                    percent: e.questionAwnsered / e.questions.length,
+                    completed: '${e.questionAnswered} de ${e.questions.length}',
+                    percent: e.questionAnswered / e.questions.length,
                     onTap: () => Navigator.of(context).push(
-                      new MaterialPageRoute(builder: (context) => new ChallengePage(questions: e.questions))
+                      new MaterialPageRoute(builder: (context) => new ChallengePage(
+                        questions: e.questions,
+                        title: e.title,
+                      ))
                     ),
                   )).toList(),
                 ),

@@ -1,38 +1,40 @@
 import 'package:DevQuiz/core/app_colors.dart';
 import 'package:DevQuiz/core/app_text_styles.dart';
-import 'package:DevQuiz/shared/models/awnser_model.dart';
+import 'package:DevQuiz/shared/models/answer_model.dart';
 import 'package:flutter/material.dart';
 
-class AwnserWidget extends StatelessWidget {
+class AnswerWidget extends StatelessWidget {
 
-  final AwnserModel awnser;
+  final AnswerModel answer;
   final bool isSelected;
   final bool disabled;
-  final VoidCallback onTap;
+  final ValueChanged<bool> onTap;
 
-  const AwnserWidget({
+  const AnswerWidget({
     Key? key,
-    required this.awnser,
+    required this.answer,
     required this.onTap,
     this.isSelected = false,
     this.disabled = false
   }) : super(key: key);
 
-  Color get _selectedColorRight => this.awnser.isRight ? AppColors.darkGreen : AppColors.darkRed;
-  Color get _selectedBorderRight => this.awnser.isRight ? AppColors.lightGreen : AppColors.lightRed;
-  Color get _selectedColorCardRight => this.awnser.isRight ? AppColors.lightGreen: AppColors.lightRed;
-  Color get _selectedBorderCardRight => this.awnser.isRight ? AppColors.green : AppColors.red;
+  Color get _selectedColorRight => this.answer.isRight ? AppColors.darkGreen : AppColors.darkRed;
+  Color get _selectedBorderRight => this.answer.isRight ? AppColors.lightGreen : AppColors.lightRed;
+  Color get _selectedColorCardRight => this.answer.isRight ? AppColors.lightGreen: AppColors.lightRed;
+  Color get _selectedBorderCardRight => this.answer.isRight ? AppColors.green : AppColors.red;
 
-  TextStyle get _selectedTextStyleRight => this.awnser.isRight ? AppTextStyles.bodyDarkGreen : AppTextStyles.bodyDarkRed;
+  TextStyle get _selectedTextStyleRight => this.answer.isRight ? AppTextStyles.bodyDarkGreen : AppTextStyles.bodyDarkRed;
 
-  IconData get _selectedIconRight => this.awnser.isRight ? Icons.check : Icons.close;
+  IconData get _selectedIconRight => this.answer.isRight ? Icons.check : Icons.close;
 
   @override
   Widget build(BuildContext context) {
     return new IgnorePointer(
       ignoring: disabled,
       child: new GestureDetector(
-        onTap: onTap,
+        onTap: () {
+          onTap(answer.isRight);
+        },
         child: new Container(
           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           padding: const EdgeInsets.all(16),
@@ -48,7 +50,7 @@ class AwnserWidget extends StatelessWidget {
             children: [
               new Expanded(
                 child: new Text(
-                  this.awnser.title,
+                  this.answer.title,
                   style: isSelected ? _selectedTextStyleRight : AppTextStyles.body,
                 ),
               ),

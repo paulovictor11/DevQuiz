@@ -4,6 +4,11 @@ import 'package:DevQuiz/core/app_colors.dart';
 import 'package:DevQuiz/core/app_text_styles.dart';
 
 class ScoreCardWidget extends StatelessWidget {
+
+  final double percent;
+
+  const ScoreCardWidget({Key? key, required this.percent}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -26,7 +31,9 @@ class ScoreCardWidget extends StatelessWidget {
             children: [
               new Expanded(
                 flex: 1,
-                child: new ChartWidget(),
+                child: new ChartWidget(
+                  percent: percent,
+                ),
               ),
               new SizedBox(width: 24),
               new Expanded(
